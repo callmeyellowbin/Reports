@@ -40,7 +40,7 @@ called the multiple aligned attributed heterogeneous social networks
 can be applied to \emph{k aligned networks} very easily.\\
 \textbf{Problem Definition}(BL-MNE Problem): Given two aligned networks $\mathcal{G}=((G^{(1)}, G^{(2)}), (\mathcal{A}^{(1,2)})$, where $G^{(1)}$ is an emerging network and $G^{(2)}$ is a mature network, BL-MNE aims at learning a mapping function $f^{(i)}: \mathcal{U}^{(i)}\rightarrow \mathbb{R}^{d^{(i)}}$ to project the user node in $G^{(i)}$ to a feature space of dimension $d^{(i)}(d^{(i)}\ll|\mathcal{U}^{(i)}|)$. The objective of mapping functions $f^{(i)}$ is to ensure the embedding results can preserve the network structural information, where similar user nodes will be projected to \textbf{close} regions. Furthermore, in the embedding process, BL-MNE also wants to transfer information between $G^{(2)}$ and $G^{(1)}$ to overcome the information sparsity problem in $G^{(1)}$.
 
-\section{Proposed Method} 
+\section{Proposed Method}
 \subsection{Heterogeneous Network Meta Proximity}
 \subsubsection{Friendship based Meta Proximity}
 In online social networks,the friendship links are the most obvious indicator of the social
@@ -56,9 +56,15 @@ $$ p^{(1)}(u_{i}^{(1)}, u_{j}^{(1)}) =
   1, & \mbox{if } (u_{i}^{(1)}, u_{j}^{(1)})\in \varepsilon_{u,u}^{(1)} \\
   0, & \mbox{otherwise}.
 \end{cases}$$\\
-\indent Here $p^{(1)}(u_{i}^{(1)}, u_{j}^{(1)})$, or in another expression, $\mathcal{P}_{\phi}^{(1)}(i,j)$, represents the \emph{friendship based meta proximity score} between users $u_{i}^{(1)}, u_{j}^{(1)}$. Thus, based on the above definition, the \emph{friendship based meta proximity} scores among all the users in the network $G^{(1)}$ can be represented as matrix $\mathbf{P}_{\phi_{0}}^{(1)}\in \mathbb{R}^{|\mathcal{U}^{(1)}\times \mathcal{U}^{(1)}|}$
-\indent
-
-
+\indent Here $p^{(1)}(u_{i}^{(1)}, u_{j}^{(1)})$, or in another expression, $\mathcal{P}_{\phi}^{(1)}(i,j)$, represents the \emph{friendship based meta proximity score} between users $u_{i}^{(1)}, u_{j}^{(1)}$. Thus, based on the above definition, the \emph{friendship based meta proximity} scores among all the users in the network $G^{(1)}$ can be represented as matrix $\mathbf{P}_{\phi_{0}}^{(1)}\in \mathbb{R}^{|\mathcal{U}^{(1)}\times \mathcal{U}^{(1)}|}$. $\phi_{0}$ denotes the simplest meta path of length 1 in the form U $\xrightarrow{follow}$ U. Here, if $G^{(1)}$ is an emerging online social network, $\mathbf{P}_{\phi_{0}}^{(1)}$ will have few value 1 and most 0, in other words, it is a sparse matrix and as a result, most existing embedding models will fail to work. The reason is that the sparse friendship information available in the network can hardly categorize the relative closeness relationships among the users (especially for those who are even not connected by friendship links), which renders these existing embedding models may project all the nodes to random regions.
+\subsubsection{Attribute Augmented Meta Path}
+\indent To handle the diverse links
+and attributes simultaneously in a unified analytic, we propose to
+treat the attributes as nodes as well and introduce the attribute
+augmented network.\\
+\textbf{Definition 4} (Attribute Augmented Network Schema): Formally, the network schema of a given online social network $G^{(1)} = (\nu, \varepsilon)$ can be represented as $s_{G^{(1)}} = (\mathcal{N}_{\nu}\cup\mathcal{N}_{\tau}, \mathcal{R}_{\varepsilon}\cup \left\{ have \right\})$, where $\mathcal{N}_{\nu}$ and $\mathcal{N}_{\tau}$ denote the set of node and attribute categories in the network, while $\mathcal{R}_{\varepsilon}$ represents the set of link types in the network, and \{have\} means the relationship between node and attribute node types. The node type set $\mathcal{N}_{\nu}$ involves node type {User,Post} while the attribute type set $\mathcal{N}_{\tau}$ includes {Word, Time, Location}. The link type set $\mathcal{R}_{\varepsilon}$ contains {follow, write}, which represents the friendship link type and the write link type respectively.\\
+\textbf{Definition 5} (Attribute Augmented Meta Path): Given a network schema $s_{G^{(1)}}$ , the \emph{Attribute Augmented Meta Path} denotes a sequence of  node/attribute types connected by the link types or the “have” relation type. Formally, the \emph{Attribute Augmented Meta Path}
+can be represented as $\phi: N_{1} \xrightarrow{R1} N_{2} \xrightarrow{R2} \dots \xrightarrow{R_{k-1}} N_{k}$, where $N_{1},\dots,N_{k} \in \mathcal{N}_{\nu} \cup \mathcal{N}_{\tau}$ and
+$R_{1},\dots,R_{k-1} \in \mathcal{R}_{\varepsilon} \cup \mathcal{R}_{\varepsilon}^{-1} \cup \left\{ have, have^{-1}\right\}$(-1 denotes the reverse of relation type direction).
 
 \end{document} 
