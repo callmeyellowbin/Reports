@@ -1,0 +1,64 @@
+\documentclass{article}
+\author {Hoben Wong}
+\title {Report About BL-MNE Algorithm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{indentfirst}
+%\setlength{\parindent}{0pt}
+\begin{document}
+\maketitle
+\section{Background}
+\subsection{Problem Studied}
+ BL-MNE means Broad Learning based eMerging Network Embedding. In the concurrent cmbedding process based on the on the broad learning setting, BL-MNE aims
+at distilling relevant information from both the emerging and other
+aligned mature networks to derive compliment knowledge and learn
+a good vector representation for user nodes in the emerging network.
+
+\subsection{Challenges}
+There are several great challenges to deal with in terms of the BL-MNE problem. They can be list as followed:
+\begin{itemize}
+  \item \emph{Problem Formulation:} To overcome the information sparsity problem, BL-MNE studies the concurrent embedding of multiple aligned social networks, which is still an open problem to this context so far. Formal definition and formulation of the BL-MNE problem is required before we introduce the solutions.
+  \item \emph{Heterogeneity of Network:} Besides the regular social
+connections among users, there also exist many other types of
+links as well as diverse attributes attached to the user nodes.
+  \item \emph{Multiple Aligned Network Embedding Framework:}  Due to the significant differences between BL-MNE with the existing works, few existing network embedding models can be applied
+to address the BL-MNE directly. A new embedding learning framework is needed to learn the emerging network embedding vectors across multiple aligned networks synergistically.
+
+\end{itemize}
+
+\section{Terminology Definition And Problem Formulation}
+\noindent \textbf{Definition 1} (Attributed Heterogeneous Social Networks): It can be represented as a graph $G = (\nu, \varepsilon, \tau)$, where $\nu = \cup_{i}\nu_{i}$ denotes the set of nodes belonging to various categories and $\varepsilon = \cup_{i}\varepsilon_{i}$ represents the set of diverse links among the nodes. $\tau = \cup_{i}\tau_{i}$ denotes the set of attributes attached to the node in $\tau$. For user $u$ in the network, the $i_{th}$ type of attribute of $u$ is $T_{i}(u)$, and all attributes $u$ has can be represented as $T(u) = \cup_{i}T_{i}(u)$.\\
+\indent Formally, Foursquare and Twitter can be both represented as the \emph{Attributed Heterogeneous Social Networks} $G = (\nu, \varepsilon, \tau)$, where $\nu = \mathcal{U} \cup \mathcal{P}$ involves the user and post nodes, and $\varepsilon = \varepsilon_{u,u} \cup \varepsilon_{u,p}$  contains  the links among users and those between users and posts. In addition, the nodes in $\nu$  are also attached with a set
+of attributes, i.e.,$\tau$. For instance, for the posts written by users, we can obtain the contained textual contents, timestamps and checkins,
+which can all be represented as the attributes of the post nodes.\\
+\indent Between Foursquare and Twitter, there may exist a large number
+of shared common users, who can align the networks together. Meanwhile, the networks connected by the anchor links are
+called the multiple aligned attributed heterogeneous social networks
+(or aligned social networks for short).\\
+\textbf{Definition 2} (Multiple Aligned Social Networks): Formally, given $n$ attributed heterogeneous social networks $\left\{ G^{(1)}, \dots, G^{(n)} \right\}$ with shared users, they can be defined as \emph{Multiple Aligned Social Networks} $\mathcal{G}=((G^{(1)}, \dots, G^{(n)}), (\mathcal{A}^{(1,2)}, \dots, A^{(n-1,n)}))$, where $\mathcal{A}^{(i,j)}$ represents the anchor links between $G^{(i)}$ and $G^{(j)}$. User pair $(u^{(i)},v^{(j)}\in \mathcal{A}^{(i,j)}$ iff $u^{(i)}$ and $v^{(j)}$ are the accounts of the same user in networks $G^{(i)}$ and $G^{(j)}$ respectively.\\
+\indent For the Foursquare and Twitter social networks, they can be presented as two aligned social networks $\mathcal{G}=((G^{(1)}, G^{(2)}), (\mathcal{A}^{(1,2)})$, which will be used as an example to illustrate the models. A simple extension of the proposed framework
+can be applied to \emph{k aligned networks} very easily.\\
+\textbf{Problem Definition}(BL-MNE Problem): Given two aligned networks $\mathcal{G}=((G^{(1)}, G^{(2)}), (\mathcal{A}^{(1,2)})$, where $G^{(1)}$ is an emerging network and $G^{(2)}$ is a mature network, BL-MNE aims at learning a mapping function $f^{(i)}: \mathcal{U}^{(i)}\rightarrow \mathbb{R}^{d^{(i)}}$ to project the user node in $G^{(i)}$ to a feature space of dimension $d^{(i)}(d^{(i)}\ll|\mathcal{U}^{(i)}|)$. The objective of mapping functions $f^{(i)}$ is to ensure the embedding results can preserve the network structural information, where similar user nodes will be projected to \textbf{close} regions. Furthermore, in the embedding process, BL-MNE also wants to transfer information between $G^{(2)}$ and $G^{(1)}$ to overcome the information sparsity problem in $G^{(1)}$.
+
+\section{Proposed Method} 
+\subsection{Heterogeneous Network Meta Proximity}
+\subsubsection{Friendship based Meta Proximity}
+In online social networks,the friendship links are the most obvious indicator of the social
+closeness among users. Online friends tend to be closer with each
+other compared with the user pairs who are not friends. Users’
+friendship links also carry important information about the local
+network structure information, which should be preserved in the
+embedding results. Based on such an intuition, the
+\emph{friendship based meta proximity} concept can be proposed as follows.\\
+\textbf{Definition 3}(Friendship based Meta Proximity): For any two user node $u_{i}^{(1)}, u_{j}^{(1)}$ in an online social network $G^{(1)}$, there exists a definition\\
+$$ p^{(1)}(u_{i}^{(1)}, u_{j}^{(1)}) =
+\begin{cases}
+  1, & \mbox{if } (u_{i}^{(1)}, u_{j}^{(1)})\in \varepsilon_{u,u}^{(1)} \\
+  0, & \mbox{otherwise}.
+\end{cases}$$\\
+\indent Here $p^{(1)}(u_{i}^{(1)}, u_{j}^{(1)})$, or in another expression, $\mathcal{P}_{\phi}^{(1)}(i,j)$, represents the \emph{friendship based meta proximity score} between users $u_{i}^{(1)}, u_{j}^{(1)}$. Thus, based on the above definition, the \emph{friendship based meta proximity} scores among all the users in the network $G^{(1)}$ can be represented as matrix $\mathbf{P}_{\phi_{0}}^{(1)}\in \mathbb{R}^{|\mathcal{U}^{(1)}\times \mathcal{U}^{(1)}|}$
+\indent
+
+
+
+\end{document} 
