@@ -3,6 +3,7 @@
 \title {Report About BL-MNE Algorithm}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{booktabs} %需要加载宏包{booktabs}
 \usepackage{indentfirst}
 %\setlength{\parindent}{0pt}
 \begin{document}
@@ -65,6 +66,27 @@ augmented network.\\
 \textbf{Definition 4} (Attribute Augmented Network Schema): Formally, the network schema of a given online social network $G^{(1)} = (\nu, \varepsilon)$ can be represented as $s_{G^{(1)}} = (\mathcal{N}_{\nu}\cup\mathcal{N}_{\tau}, \mathcal{R}_{\varepsilon}\cup \left\{ have \right\})$, where $\mathcal{N}_{\nu}$ and $\mathcal{N}_{\tau}$ denote the set of node and attribute categories in the network, while $\mathcal{R}_{\varepsilon}$ represents the set of link types in the network, and \{have\} means the relationship between node and attribute node types. The node type set $\mathcal{N}_{\nu}$ involves node type {User,Post} while the attribute type set $\mathcal{N}_{\tau}$ includes {Word, Time, Location}. The link type set $\mathcal{R}_{\varepsilon}$ contains {follow, write}, which represents the friendship link type and the write link type respectively.\\
 \textbf{Definition 5} (Attribute Augmented Meta Path): Given a network schema $s_{G^{(1)}}$ , the \emph{Attribute Augmented Meta Path} denotes a sequence of  node/attribute types connected by the link types or the “have” relation type. Formally, the \emph{Attribute Augmented Meta Path}
 can be represented as $\phi: N_{1} \xrightarrow{R1} N_{2} \xrightarrow{R2} \dots \xrightarrow{R_{k-1}} N_{k}$, where $N_{1},\dots,N_{k} \in \mathcal{N}_{\nu} \cup \mathcal{N}_{\tau}$ and
-$R_{1},\dots,R_{k-1} \in \mathcal{R}_{\varepsilon} \cup \mathcal{R}_{\varepsilon}^{-1} \cup \left\{ have, have^{-1}\right\}$(-1 denotes the reverse of relation type direction).
+$R_{1},\dots,R_{k-1} \in \mathcal{R}_{\varepsilon} \cup \mathcal{R}_{\varepsilon}^{-1} \cup \left\{ have, have^{-1}\right\}$(-1 denotes the reverse of relation type direction). If $N_{1}=N_{K}=U$, for example, meta paths starts and ends with the user node type, the meat path will be called the \emph{social meta paths}.\\
+\indent Based on the above definition, a set of different \emph{social meta paths} $\left\{ \phi_{0}, \phi_{1}, \phi_{2}, \dots, \phi_{7} \right\}$ can be extracted from the network, it can be shown on the following table.\\
+\noindent 
+%\resizebox{!}{5cm}{
+\tiny
+\begin{tabular}{llll}
 
+  \toprule  %添加表格头部粗线
+  % after \\: \hline or \cline{col1-col2} \cline{col3-col4} ...
+  ID & Notation & Heterogeneous Network Meta Path & Semantics \\
+  \hline
+  $\phi_{0}$ & $U\rightarrow U$ & $User\xrightarrow{follow}User$ & Follow \\
+  $\phi_{1}$ & $U\rightarrow U \rightarrow U$ & $U\xrightarrow{follow}U\xrightarrow{follow}U$ & Follower of Follower \\
+  $\phi_{2}$ & $U\rightarrow U \leftarrow U$ & $U\xrightarrow{follow}U\xrightarrow{follow^{-1}}U$ & Common Out Neighbor  \\
+  $\phi_{3}$ & $U \leftarrow U\rightarrow U$ & $U\xrightarrow{follow^{-1}}U\xrightarrow{follow}U$ & Common In Neighbor \\
+  \midrule  %添加表格中横线
+  $\phi_{4}$ & $U\leftarrow U \leftarrow U$ & $U\xrightarrow{follow^{-1}}U\xrightarrow{follow^{-1}}U$ & Followee of Followee \\
+  $\phi_{5}$ & $U\rightarrow P \rightarrow W \leftarrow P \leftarrow U$ & $User\xrightarrow{write} Post \xrightarrow{have} Word \xrightarrow{have^{-1}} Post \xrightarrow{write^{-1}} User$ & Posts Containing Common Words \\
+  $\phi_{6}$ & $U\rightarrow P \rightarrow T \leftarrow P \leftarrow U$ & $User\xrightarrow{write} Post \xrightarrow{have} Time \xrightarrow{have^{-1}} Post \xrightarrow{write^{-1}} User$ & Posts Containing Common Timestamps \\
+  $\phi_{7}$ & $U\rightarrow P \rightarrow L \leftarrow P \leftarrow U$ & $User\xrightarrow{write} Post \xrightarrow{have} Location \xrightarrow{have^{-1}} Post \xrightarrow{write^{-1}} User$ & Posts Attaching Common Location Check-ins \\
+  \bottomrule %添加表格底部粗线
+\end{tabular}
+%}
 \end{document} 
